@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PickMate</title>
+<style>
+body{font-family:sans-serif;margin:0;background:#f5f7ff}
+.app{max-width:390px;margin:auto;padding:20px}
+.screen{display:none}
+.screen.active{display:block}
+.btn{width:100%;padding:15px;border:none;border-radius:12px;background:#6c7cff;color:#fff;margin-top:15px}
+.card{background:#fff;padding:15px;border-radius:12px;margin:10px 0}
+.chip{padding:8px 12px;border-radius:20px;border:1px solid #ccc;margin:5px;display:inline-block;cursor:pointer}
+.chip.active{background:#6c7cff;color:#fff}
+.center{text-align:center}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div id="start" class="screen active center">
+<h1>🤖 PickMate</h1>
+<p>AI 선택 도우미</p>
+<button class="btn" onclick="go('category')">시작하기</button>
+</div>
+
+<div id="category" class="screen">
+<h2>상황 선택</h2>
+<div class="card">
+<button class="btn" onclick="selectCategory('음식')">🍜 음식</button>
+<button class="btn" onclick="selectCategory('쇼핑')">🛍 쇼핑</button>
+<button class="btn" onclick="selectCategory('여행')">✈️ 여행</button>
+<button class="btn" onclick="selectCategory('기타')">✨ 기타</button>
+</div>
+</div>
+
+<div id="input" class="screen">
+<h2>선택 입력</h2>
+<div class="card">
+<input id="topic" placeholder="고민 입력" style="width:100%;padding:10px">
+<input id="a" placeholder="선택 A" style="width:100%;padding:10px;margin-top:10px">
+<input id="b" placeholder="선택 B" style="width:100%;padding:10px;margin-top:10px">
+</div>
+<button class="btn" onclick="go('criteria')">다음</button>
+</div>
+
+<div id="criteria" class="screen">
+<h2>조건 선택</h2>
+<div>
+<span class="chip" onclick="toggle(this)">비용</span>
+<span class="chip" onclick="toggle(this)">시간</span>
+<span class="chip" onclick="toggle(this)">만족도</span>
+<span class="chip" onclick="toggle(this)">감정</span>
+<span class="chip" onclick="toggle(this)">효율</span>
+</div>
+<button class="btn" onclick="analyze()">분석</button>
+</div>
+
+<div id="result" class="screen">
+<h2>결과</h2>
+<div class="card">
+<p id="resultText"></p>
+</div>
+<button class="btn" onclick="go('start')">다시하기</button>
+</div>
+
+</div>
+
+<script>
+let category="";
+
+function go(id){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+function selectCategory(c){
+category=c;
+go('input');
+}
+
+function toggle(el){
+el.classList.toggle('active');
+}
+
+function analyze(){
+let a=document.getElementById('a').value||"A";
+let b=document.getElementById('b').value||"B";
+let pick=Math.random()>0.5?a:b;
+
+let reason="";
+if(category==="음식") reason="맛과 만족도를 고려했어요.";
+else if(category==="쇼핑") reason="가성비와 실용성을 고려했어요.";
+else if(category==="여행") reason="경험과 즐거움을 고려했어요.";
+else reason="전체적인 균형을 고려했어요.";
+
+document.getElementById('resultText').innerText=pick+" 추천! "+reason;
+
+go('result');
+}
+</script>
+
+</body>
+</html>
